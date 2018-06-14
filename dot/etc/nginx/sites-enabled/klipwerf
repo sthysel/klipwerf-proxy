@@ -1,0 +1,95 @@
+# klipwerf nginx
+server {
+        add_header X-Clacks-Overhead "GNU Terry Pratchett";
+	root /home/thys/www;
+	index index.html index.htm;
+
+	# Make site accessible from http://localhost/
+	server_name sthysel.net;
+
+	location / {
+		# First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+		try_files $uri $uri/ /index.html;
+		# Uncomment to enable naxsi on this location
+		# include /etc/nginx/naxsi.rules
+	}
+
+	location /doc/ {
+		alias /usr/share/doc/;
+		autoindex on;
+		allow 127.0.0.1;
+		allow ::1;
+		deny all;
+	}
+
+	#error_page 404 /404.html;
+
+	# redirect server error pages to the static page /50x.html
+	#
+	#error_page 500 502 503 504 /50x.html;
+	#location = /50x.html {
+	#	root /usr/share/nginx/www;
+	#}
+
+
+	# deny access to .htaccess files, if Apache's document root
+	# concurs with nginx's one
+	#
+	#location ~ /\.ht {
+	#	deny all;
+	#}
+}
+
+
+# millercam
+##server {
+#        resolver 192.168.1.1;
+#	listen 80;
+#	server_name millercam.sthysel.net;
+#        location / {
+#           proxy_pass http://millercam:7777;
+#        }
+#}
+
+
+# ADSB
+server {
+        resolver 8.8.8.8;
+	listen 80;
+	server_name adsb.sthysel.net;
+        location / {
+           proxy_pass http://airplane:8080;
+        }
+}
+
+server {
+        resolver 8.8.8.8;
+	listen 80;
+	server_name shortbread.sthysel.net;
+        location / {
+           proxy_pass http://airplane:8080;
+        }
+}
+
+
+# Davis weather station
+server {
+        resolver 8.8.8.8;
+	listen 80;
+	server_name weather.sthysel.net;
+        location / {
+           proxy_pass http://davis/weewx/;
+        }
+}
+
+# bughotel weather station
+##server {
+#        resolver 8.8.8.8;
+#	listen 80;
+#	server_name bughotel.sthysel.net;
+#        location / {
+#           proxy_pass http://bughotel/weewx/;
+#        }
+#}
+
